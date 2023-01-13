@@ -7,7 +7,6 @@ import android.graphics.PointF
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
-import androidx.core.content.res.TypedArrayUtils.getResourceId
 import androidx.core.content.withStyledAttributes
 import ru.netology.statsview.R
 import ru.netology.statsview.utils.AndroidUtils
@@ -45,7 +44,7 @@ class StatsView @JvmOverloads constructor(
     ).apply {
         strokeWidth = lineWidth
         style = Paint.Style.STROKE
-        strokeJoin = Paint.Join.ROUND //?
+        strokeJoin = Paint.Join.ROUND
         strokeCap = Paint.Cap.ROUND
     }
 
@@ -98,6 +97,8 @@ class StatsView @JvmOverloads constructor(
             canvas.drawArc(oval, startFrom, angle, false, paint)
             startFrom += angle
         }
+        paint.color = colors[0]
+        canvas.drawPoint(center.x, center.y - radius, paint)
 
         canvas.drawText(
             "%.2f%%".format(data.sum() * 100 * smartStatsViewDivider(data.sum())),
