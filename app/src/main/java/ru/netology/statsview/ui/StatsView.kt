@@ -1,5 +1,6 @@
 package ru.netology.statsview.ui
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -7,6 +8,7 @@ import android.graphics.PointF
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import android.view.animation.LinearInterpolator
 import androidx.core.content.withStyledAttributes
 import ru.netology.statsview.R
 import ru.netology.statsview.utils.AndroidUtils
@@ -29,7 +31,7 @@ class StatsView @JvmOverloads constructor(
     var data: List<Float> = emptyList()
         set(value) {
             field = value
-            invalidate()
+            update()
         }
 
     private var radius = 0F
@@ -38,6 +40,11 @@ class StatsView @JvmOverloads constructor(
     private var textSize = AndroidUtils.dp(context, 40).toFloat()
     private var lineWidth = AndroidUtils.dp(context, 16).toFloat()
     private var colors = emptyList<Int>()
+
+
+    private var progress = 0F
+    private var valueAnimator: ValueAnimator? = null
+
 
     private val paint = Paint(
         Paint.ANTI_ALIAS_FLAG
@@ -86,6 +93,8 @@ class StatsView @JvmOverloads constructor(
         )
     }
 
+    private val durationAnimation = 3000L
+
     override fun onDraw(canvas: Canvas) {
         if (data.isEmpty()) {
             return
@@ -94,17 +103,42 @@ class StatsView @JvmOverloads constructor(
         data.forEachIndexed { index, datum ->
             val angle = datum * 360F * smartStatsViewDivider(data.sum())
             paint.color = colors.getOrElse(index) { randomColor() }
-            canvas.drawArc(oval, startFrom, angle, false, paint)
+            canvas.drawArc(oval, startFrom + progress * 360F, angle * progress, false, paint)
             startFrom += angle
+        }.apply {
+            if (progress == 1F) {
+                paint.color = colors[0]
+                canvas.drawPoint(center.x, center.y - radius, paint)
+            }
         }
-        paint.color = colors[0]
-        canvas.drawPoint(center.x, center.y - radius, paint)
+
+
+
 
         canvas.drawText(
-            "%.2f%%".format(data.sum() * 100 * smartStatsViewDivider(data.sum())),
+            "%.2f%%".format(data.sum() * progress * 100 * smartStatsViewDivider(data.sum())),
             center.x,
             center.y + textPaint.textSize / 4,
             textPaint,
         )
+    }
+
+    private fun update() {
+        valueAnimator?.let {
+            it.removeAllListeners()
+            it.cancel()
+        }
+        progress = 0F
+
+        valueAnimator = ValueAnimator.ofFloat(0F, 1F).apply {
+            addUpdateListener { anim ->
+                progress = anim.animatedValue as Float
+                invalidate()
+            }
+            duration = durationAnimation
+            interpolator = LinearInterpolator()
+        }.also {
+            it.start()
+        }
     }
 }

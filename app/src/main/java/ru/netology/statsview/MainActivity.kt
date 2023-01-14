@@ -8,12 +8,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        findViewById<StatsView>(R.id.stats_view).data = listOf(
-            0.2F,
-            0.2F,
-            0.2F,
-            0.2F,
-            0.2F,
-        )
+        val view = findViewById<StatsView>(R.id.stats_view)
+        view.postDelayed({
+            view.data = listOf(
+                0.2F,
+                0.2F,
+                0.2F,
+                0.2F,
+                0.2F,
+            )
+        }, 50)
+
     }
 }
