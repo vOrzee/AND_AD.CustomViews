@@ -14,5 +14,6 @@
             <enum name="sequential" value="2" />
             <enum name="bidirectional" value="3" />
         </attr>
+        <attr name="duration" format="integer"/>
     </declare-styleable>
 </resources>
