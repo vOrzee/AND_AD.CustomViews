@@ -106,15 +106,12 @@ class StatsView @JvmOverloads constructor(
             textPaint,
         )
         var startFrom = -90F
-        val currentProgress = progress*360F
-        var lastProgress = 0F
         data.forEachIndexed { index, datum ->
             val angle = datum * 360F * smartStatsViewDivider(data.sum())
             paint.color = colors.getOrElse(index) { randomColor() }
-            canvas.drawArc(oval, startFrom, currentProgress-lastProgress, false, paint)
+            canvas.drawArc(oval, startFrom, angle/2 * progress, false, paint)
+            canvas.drawArc(oval, startFrom, -angle/2 * progress, false, paint)
             startFrom += angle
-            lastProgress += angle
-            if (lastProgress>currentProgress) return
         }.apply {
             if (progress == 1F) {
                 paint.color = colors[0]
