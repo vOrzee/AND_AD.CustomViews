@@ -99,28 +99,28 @@ class StatsView @JvmOverloads constructor(
         if (data.isEmpty()) {
             return
         }
-        var startFrom = -90F
-        data.forEachIndexed { index, datum ->
-            val angle = datum * 360F * smartStatsViewDivider(data.sum())
-            paint.color = colors.getOrElse(index) { randomColor() }
-            canvas.drawArc(oval, startFrom + progress * 360F, angle * progress, false, paint)
-            startFrom += angle
-        }.apply {
-            if (progress == 1F) {
-                paint.color = colors[0]
-                canvas.drawPoint(center.x, center.y - radius, paint)
-            }
-        }
-
-
-
-
         canvas.drawText(
             "%.2f%%".format(data.sum() * progress * 100 * smartStatsViewDivider(data.sum())),
             center.x,
             center.y + textPaint.textSize / 4,
             textPaint,
         )
+        var startFrom = -90F
+        val currentProgress = progress*360F
+        var lastProgress = 0F
+        data.forEachIndexed { index, datum ->
+            val angle = datum * 360F * smartStatsViewDivider(data.sum())
+            paint.color = colors.getOrElse(index) { randomColor() }
+            canvas.drawArc(oval, startFrom, currentProgress-lastProgress, false, paint)
+            startFrom += angle
+            lastProgress += angle
+            if (lastProgress>currentProgress) return
+        }.apply {
+            if (progress == 1F) {
+                paint.color = colors[0]
+                canvas.drawPoint(center.x, center.y - radius, paint)
+            }
+        }
     }
 
     private fun update() {
