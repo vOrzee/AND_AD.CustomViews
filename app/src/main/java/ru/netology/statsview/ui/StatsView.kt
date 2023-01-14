@@ -107,8 +107,14 @@ class StatsView @JvmOverloads constructor(
             textPaint,
         )
         var startFrom = -90F
-
-        when (fillingType) {
+        if (progress > data.sum() * smartStatsViewDivider(data.sum())) {
+            data.forEachIndexed { index, datum ->
+                val angle = datum * 360F * smartStatsViewDivider(data.sum())
+                paint.color = colors.getOrElse(index) { randomColor() }
+                canvas.drawArc(oval, startFrom, angle, false, paint)
+                startFrom += angle
+            }
+        } else when (fillingType) {
             1 -> { // fillingType "rotation"
                 data.forEachIndexed { index, datum ->
                     val angle = datum * 360F * smartStatsViewDivider(data.sum())
