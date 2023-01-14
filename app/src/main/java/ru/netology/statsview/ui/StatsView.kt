@@ -41,9 +41,9 @@ class StatsView @JvmOverloads constructor(
     private var lineWidth = AndroidUtils.dp(context, 16).toFloat()
     private var colors = emptyList<Int>()
 
-
     private var progress = 0F
     private var valueAnimator: ValueAnimator? = null
+    private var fillingType: Int = 0
 
 
     private val paint = Paint(
@@ -74,6 +74,7 @@ class StatsView @JvmOverloads constructor(
                 getColor(R.styleable.StatsView_color4, randomColor()),
                 getColor(R.styleable.StatsView_color5, randomColor()),
             )
+            fillingType = getInt(R.styleable.StatsView_fillingType, fillingType)
         }
     }
 
@@ -106,16 +107,60 @@ class StatsView @JvmOverloads constructor(
             textPaint,
         )
         var startFrom = -90F
-        data.forEachIndexed { index, datum ->
-            val angle = datum * 360F * smartStatsViewDivider(data.sum())
-            paint.color = colors.getOrElse(index) { randomColor() }
-            canvas.drawArc(oval, startFrom, angle/2 * progress, false, paint)
-            canvas.drawArc(oval, startFrom, -angle/2 * progress, false, paint)
-            startFrom += angle
-        }.apply {
-            if (progress == 1F) {
-                paint.color = colors[0]
-                canvas.drawPoint(center.x, center.y - radius, paint)
+
+        when(fillingType) {
+            1 -> { // fillingType "rotation"
+                data.forEachIndexed { index, datum ->
+                    val angle = datum * 360F * smartStatsViewDivider(data.sum())
+                    paint.color = colors.getOrElse(index) { randomColor() }
+                    canvas.drawArc(oval, startFrom, angle*progress, false, paint)
+                    startFrom += angle*progress
+                }.apply {
+                    if (progress == 1F) {
+                        paint.color = colors[0]
+                        canvas.drawPoint(center.x, center.y - radius, paint)
+                    }
+                }
+            }
+            2 -> { // fillingType "sequential"
+                data.forEachIndexed { index, datum ->
+                    val angle = datum * 360F * smartStatsViewDivider(data.sum())
+                    paint.color = colors.getOrElse(index) { randomColor() }
+                    canvas.drawArc(oval, startFrom, angle*progress, false, paint)
+                    startFrom += angle*progress
+                }.apply {
+                    if (progress == 1F) {
+                        paint.color = colors[0]
+                        canvas.drawPoint(center.x, center.y - radius, paint)
+                    }
+                }
+            }
+            3 -> { // fillingType "bidirectional"
+                data.forEachIndexed { index, datum ->
+                    val angle = datum * 360F * smartStatsViewDivider(data.sum())
+                    paint.color = colors.getOrElse(index) { randomColor() }
+                    canvas.drawArc(oval, startFrom, angle/2 * progress, false, paint)
+                    canvas.drawArc(oval, startFrom, -angle/2 * progress, false, paint)
+                    startFrom += angle
+                }.apply {
+                    if (progress == 1F) {
+                        paint.color = colors[0]
+                        canvas.drawPoint(center.x, center.y - radius, paint)
+                    }
+                }
+            }
+            else -> { // fillingType do nothing or "standard"
+                data.forEachIndexed { index, datum ->
+                    val angle = datum * 360F * smartStatsViewDivider(data.sum())
+                    paint.color = colors.getOrElse(index) { randomColor() }
+                    canvas.drawArc(oval, startFrom, angle * progress, false, paint)
+                    startFrom += angle
+                }.apply {
+                    if (progress == 1F) {
+                        paint.color = colors[0]
+                        canvas.drawPoint(center.x, center.y - radius, paint)
+                    }
+                }
             }
         }
     }
