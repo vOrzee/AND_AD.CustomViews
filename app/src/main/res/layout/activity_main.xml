@@ -17,6 +17,8 @@
         app:color3="#456789"
         app:color4="#678901"
         app:color5="#901234"
+        app:fillingType="rotation"
+        app:duration="2500"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
