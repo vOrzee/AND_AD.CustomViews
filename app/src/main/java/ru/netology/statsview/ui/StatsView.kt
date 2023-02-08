@@ -117,7 +117,6 @@ class StatsView @JvmOverloads constructor(
         )
         var startFrom = -90F
         checkedUserChoice()
-        //fillingType = 2
         when (fillingType) {
             1 -> { // fillingType "rotation"
                 data.forEachIndexed { index, datum ->
