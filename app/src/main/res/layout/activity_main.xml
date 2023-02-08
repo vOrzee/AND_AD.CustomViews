@@ -6,22 +6,103 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <EditText
+        android:id="@+id/param_1"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="@string/default_values"
+        android:inputType="text"
+        android:text="@string/default_values"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="LabelFor" />
+
+    <EditText
+        android:id="@+id/param_2"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="@string/default_values"
+        android:inputType="text"
+        android:text="@string/default_values"
+        app:layout_constraintStart_toEndOf="@+id/param_1"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="LabelFor" />
+
+    <EditText
+        android:id="@+id/param_3"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="@string/default_values"
+        android:inputType="text"
+        android:text="@string/default_values"
+        app:layout_constraintStart_toEndOf="@+id/param_2"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="LabelFor" />
+
+    <EditText
+        android:id="@+id/param_4"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="@string/default_values"
+        android:inputType="text"
+        android:text="@string/default_values"
+        app:layout_constraintStart_toEndOf="@+id/param_3"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="LabelFor" />
+
+    <EditText
+        android:id="@+id/param_5"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="@string/default_values"
+        android:inputType="text"
+        android:text="@string/default_values"
+        app:layout_constraintStart_toEndOf="@+id/param_4"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="LabelFor" />
+
+    <Button
+        android:id="@+id/starter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/start"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/param_1" />
+
+
     <ru.netology.statsview.ui.StatsView
         android:id="@+id/stats_view"
         android:layout_width="320dp"
         android:layout_height="320dp"
-        app:textSize="20sp"
-        app:lineWidth="16dp"
         app:color1="#012345"
         app:color2="#234567"
         app:color3="#456789"
         app:color4="#678901"
         app:color5="#901234"
-        app:fillingType="rotation"
         app:duration="2500"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:lineWidth="16dp"
+        app:textSize="20sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hint_of_type_animation"
+        app:layout_constraintBottom_toTopOf="@id/filling_type"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/filling_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="@string/default_animation"
+        android:inputType="text"
+        android:text="@string/default_animation"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="LabelFor" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

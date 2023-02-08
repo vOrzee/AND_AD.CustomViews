@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">StatsView</string>
+    <string name="start">START</string>
+    <string name="default_values">0.2</string>
+    <string name="default_animation">bidirectional</string>
+    <string name="hint_of_type_animation">Choice: rotation, sequential, bidirectional. (Default: standard)</string>
 </resources>

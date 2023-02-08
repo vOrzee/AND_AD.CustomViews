@@ -33,6 +33,7 @@ class StatsView @JvmOverloads constructor(
             field = value
             update()
         }
+    var fillingTypeField = ""
 
     private var radius = 0F
     private var center = PointF()
@@ -45,7 +46,6 @@ class StatsView @JvmOverloads constructor(
     private var valueAnimator: ValueAnimator? = null
     private var fillingType: Int = 0
     private var durationAnimation = 300L
-
 
     private val paint = Paint(
         Paint.ANTI_ALIAS_FLAG
@@ -85,6 +85,15 @@ class StatsView @JvmOverloads constructor(
     private fun smartStatsViewDivider(sum: Float): Float =
         if (sum < 1) 1F else sum.pow(-1)
 
+    private fun checkedUserChoice() {
+        when(fillingTypeField) {
+            "rotation" -> fillingType = 1
+            "sequential" -> fillingType = 2
+            "bidirectional" -> fillingType = 3
+            else -> {}
+        }
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         radius = min(w, h) / 2F - lineWidth - 1 / 2
         center = PointF(w / 2F, h / 2F)
@@ -107,14 +116,9 @@ class StatsView @JvmOverloads constructor(
             textPaint,
         )
         var startFrom = -90F
-        if (progress > data.sum() * smartStatsViewDivider(data.sum())) {
-            data.forEachIndexed { index, datum ->
-                val angle = datum * 360F * smartStatsViewDivider(data.sum())
-                paint.color = colors.getOrElse(index) { randomColor() }
-                canvas.drawArc(oval, startFrom, angle, false, paint)
-                startFrom += angle
-            }
-        } else when (fillingType) {
+        checkedUserChoice()
+        //fillingType = 2
+        when (fillingType) {
             1 -> { // fillingType "rotation"
                 data.forEachIndexed { index, datum ->
                     val angle = datum * 360F * smartStatsViewDivider(data.sum())
